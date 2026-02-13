@@ -7,6 +7,7 @@ from rapidfuzz import fuzz
 from typing import List
 from app.services.sanctions_service import check_sanctions
 from app.services.section889_service import evaluate_section_889
+from app.services.assessment_service import run_assessment
 
 
 router = APIRouter(prefix="/suppliers", tags=["Suppliers"])
@@ -67,3 +68,7 @@ def supplier_sanctions_check(supplier_id: int, db: Session = Depends(get_db)):
 @router.get("/{supplier_id}/section-889")
 def section_889_check(supplier_id: int, db: Session = Depends(get_db)):
     return evaluate_section_889(supplier_id, db)
+
+@router.get("/{supplier_id}/assessment")
+def supplier_assessment(supplier_id: int, db: Session = Depends(get_db)):
+    return run_assessment(supplier_id, db)
