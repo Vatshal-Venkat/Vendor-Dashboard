@@ -21,7 +21,8 @@ class SupplierResponse(BaseModel):
 class UserCreate(BaseModel):
     username: str
     password: str
-    role: Optional[str] = "viewer"
+    role: Optional[str] = "VIEWER"
+
 
 
 class UserLogin(BaseModel):
