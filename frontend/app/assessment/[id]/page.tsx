@@ -4,11 +4,7 @@ import { useEffect, useState, useMemo } from "react";
 import api from "@/lib/api";
 import { useParams, useRouter } from "next/navigation";
 import jsPDF from "jspdf";
-
-type NetworkNode = {
-  id: string;
-  risk: "PASS" | "CONDITIONAL" | "FAIL";
-};
+import TrustGraph from "@/components/TrustGraph";
 
 type TimelineEvent = {
   timestamp: string;
@@ -29,7 +25,6 @@ type AssessmentData = {
   sanctions: any;
   section_889: any;
   explanations: string[];
-  graph?: { nodes: NetworkNode[] };
   timeline?: TimelineEvent[];
   audit_log?: AuditEntry[];
   risk_history?: number[];
@@ -127,16 +122,23 @@ export default function AssessmentPage() {
           </div>
         </div>
 
-        {/* Risk Score Card */}
-        <div className="border border-zinc-800 rounded-lg p-8 bg-[#0b111b] flex justify-between items-center">
-          <div>
-            <div className="text-xs uppercase tracking-widest text-gray-500">
-              Overall Risk Score
-            </div>
-            <div className="text-5xl font-semibold mt-3">
-              {data.risk_score}
-            </div>
+        {/* Risk Score */}
+        <div className="border border-zinc-800 rounded-lg p-8 bg-[#0b111b]">
+          <div className="text-xs uppercase tracking-widest text-gray-500">
+            Overall Risk Score
           </div>
+          <div className="text-5xl font-semibold mt-3">
+            {data.risk_score}
+          </div>
+        </div>
+
+        {/* 🔥 Trust Graph Section */}
+        <div className="border border-zinc-800 rounded-lg p-8 bg-[#0b111b]">
+          <div className="text-xs uppercase tracking-widest text-gray-500 mb-6">
+            Trust & Entity Network
+          </div>
+
+          <TrustGraph name={data.supplier} />
         </div>
 
         {/* Risk Trend */}
