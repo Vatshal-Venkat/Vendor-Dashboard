@@ -1,7 +1,7 @@
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from fastapi import Request, HTTPException, Depends
-from app.models.user import User
+from app.models import User
 from app.database import get_db
 from sqlalchemy.orm import Session
 import os

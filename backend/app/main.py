@@ -1,39 +1,62 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from app.routes import health, supplier, audit
-from app.api import auth
+from app.api import auth, admin
+
 from app.database import engine, SessionLocal
+from app.models import Base
 from app import models
+
 from app.services.sanctions_loader import load_sanctions
 from app.services.covered_loader import load_covered_entities
-from app.api import admin
+
 
 app = FastAPI(title="Supplier Risk Intelligence Platform")
 
+
+# =====================================================
+# CORS CONFIGURATION
+# =====================================================
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],
+    allow_origins=[
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Routers
+
+# =====================================================
+# ROUTERS
+# =====================================================
 app.include_router(auth.router)
+app.include_router(admin.router)
 app.include_router(health.router)
 app.include_router(supplier.router)
 app.include_router(audit.router)
 
-app.include_router(admin.router)
 
-
+# =====================================================
+# ROOT
+# =====================================================
 @app.get("/")
 def root():
     return {"message": "Supplier Risk Backend Running"}
 
 
+# =====================================================
+# STARTUP
+# =====================================================
 @app.on_event("startup")
 def startup_event():
+
+    # Create tables (dev mode)
+    Base.metadata.create_all(bind=engine)
+
     db = SessionLocal()
 
     load_sanctions(db, "data/sanctions.csv")

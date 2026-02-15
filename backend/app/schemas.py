@@ -3,6 +3,8 @@ from typing import Optional
 from datetime import datetime
 from typing import Optional, Dict, Any
 
+
+
 class SupplierCreate(BaseModel):
     name: str
     country: Optional[str] = None

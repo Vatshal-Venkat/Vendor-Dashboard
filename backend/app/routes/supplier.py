@@ -1,29 +1,39 @@
 from fastapi import APIRouter, Depends, WebSocket
 from sqlalchemy.orm import Session
-from app.database import get_db
+from typing import List
+import asyncio
+
+from app.database import get_db, SessionLocal
 from app.models import Supplier, AssessmentHistory, User
 from app.schemas import SupplierCreate, SupplierResponse
-from typing import List
 from app.services.assessment_service import run_assessment
 from app.services.audit_service import log_action
-from app.routes.auth import get_current_user
-import asyncio
+from app.core.security import get_current_user
+
 
 router = APIRouter(prefix="/suppliers", tags=["Suppliers"])
 
 
+# =====================================================
+# CREATE SUPPLIER (TENANT SAFE)
+# =====================================================
 @router.post("/", response_model=SupplierResponse)
 def create_supplier(
     supplier: SupplierCreate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    db_supplier = Supplier(**supplier.model_dump())
+    db_supplier = Supplier(
+        name=supplier.name,
+        country=supplier.country,
+        industry=supplier.industry,
+        organization_id=current_user.organization_id,  # 🔥 TENANT LOCK
+    )
+
     db.add(db_supplier)
     db.commit()
     db.refresh(db_supplier)
 
-    # Audit log
     log_action(
         db=db,
         user_id=current_user.id,
@@ -36,44 +46,44 @@ def create_supplier(
     return db_supplier
 
 
+# =====================================================
+# LIST SUPPLIERS (TENANT SAFE)
+# =====================================================
 @router.get("/", response_model=List[SupplierResponse])
-def list_suppliers(db: Session = Depends(get_db)):
-    return db.query(Supplier).all()
+def list_suppliers(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return (
+        db.query(Supplier)
+        .filter(Supplier.organization_id == current_user.organization_id)
+        .all()
+    )
 
 
-@router.get("/with-status")
-def list_suppliers_with_status(db: Session = Depends(get_db)):
-    suppliers = db.query(Supplier).all()
-    result = []
-
-    for supplier in suppliers:
-        latest = (
-            db.query(AssessmentHistory)
-            .filter(AssessmentHistory.supplier_id == supplier.id)
-            .order_by(AssessmentHistory.created_at.desc())
-            .first()
-        )
-
-        result.append({
-            "id": supplier.id,
-            "name": supplier.name,
-            "country": supplier.country,
-            "industry": supplier.industry,
-            "risk": latest.overall_status if latest else None,
-        })
-
-    return result
-
-
+# =====================================================
+# SUPPLIER ASSESSMENT
+# =====================================================
 @router.get("/{supplier_id}/assessment")
 def supplier_assessment(
     supplier_id: int,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
+    supplier = (
+        db.query(Supplier)
+        .filter(
+            Supplier.id == supplier_id,
+            Supplier.organization_id == current_user.organization_id,
+        )
+        .first()
+    )
+
+    if not supplier:
+        raise Exception("Supplier not found")
+
     result = run_assessment(supplier_id, db)
 
-    # Audit log
     log_action(
         db=db,
         user_id=current_user.id,
@@ -86,31 +96,9 @@ def supplier_assessment(
     return result
 
 
-@router.post("/compare")
-def compare_suppliers(
-    supplier_ids: List[int],
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    results = []
-
-    for sid in supplier_ids:
-        result = run_assessment(sid, db)
-
-        log_action(
-            db=db,
-            user_id=current_user.id,
-            action="RUN_ASSESSMENT_COMPARE",
-            resource_type="Supplier",
-            resource_id=sid,
-            details={"result": result.get("overall_status")},
-        )
-
-        results.append(result)
-
-    return results
-
-
+# =====================================================
+# SUPPLIER HISTORY (TENANT SAFE)
+# =====================================================
 @router.get("/{supplier_id}/history")
 def supplier_history(
     supplier_id: int,
@@ -119,16 +107,22 @@ def supplier_history(
 ):
     return (
         db.query(AssessmentHistory)
-        .filter(AssessmentHistory.supplier_id == supplier_id)
+        .join(Supplier)
+        .filter(
+            Supplier.id == supplier_id,
+            Supplier.organization_id == current_user.organization_id,
+        )
         .order_by(AssessmentHistory.created_at.asc())
         .all()
     )
 
 
+# =====================================================
+# STREAM
+# =====================================================
 @router.websocket("/stream/{supplier_id}")
 async def stream_supplier(websocket: WebSocket, supplier_id: int):
     await websocket.accept()
-    from app.database import SessionLocal
 
     while True:
         db = SessionLocal()
