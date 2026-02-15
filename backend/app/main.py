@@ -11,6 +11,8 @@ from app import models
 from app.services.sanctions_loader import load_sanctions
 from app.services.covered_loader import load_covered_entities
 
+from app.routes import graph
+
 
 app = FastAPI(title="Supplier Risk Intelligence Platform")
 
@@ -38,7 +40,7 @@ app.include_router(admin.router)
 app.include_router(health.router)
 app.include_router(supplier.router)
 app.include_router(audit.router)
-
+app.include_router(graph.router)
 
 # =====================================================
 # ROOT

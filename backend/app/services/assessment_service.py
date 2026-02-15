@@ -3,6 +3,8 @@ from app.models import AssessmentHistory, ScoringConfig
 from app.services.sanctions_service import check_sanctions
 from app.services.section889_service import evaluate_section_889
 from app.services.external_intelligence_service import news_risk_signal
+from app.graph.risk_propagation import propagate_risk
+
 
 
 def generate_executive_brief(overall_status: str):
@@ -74,6 +76,13 @@ def run_assessment(supplier_id: int, db: Session):
         risk_score += news_score
         reasons.append("Negative media signal detected")
 
+    graph_risk = propagate_risk(supplier_name)
+
+    if graph_risk > 0:
+        risk_score += graph_risk
+        reasons.append("Graph-based relationship risk detected")
+
+
     risk_score = min(risk_score, 100)
 
     overall_status = calculate_overall_status(risk_score)
@@ -99,4 +108,5 @@ def run_assessment(supplier_id: int, db: Session):
         "news_signal_score": news_score,
         "explanations": reasons,
         "executive_brief": executive_brief,
+        "graph_risk_score": graph_risk,
     }

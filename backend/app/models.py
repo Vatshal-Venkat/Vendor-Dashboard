@@ -47,7 +47,7 @@ class User(Base):
 
 
 # =====================================================
-# GLOBAL CANONICAL ENTITY
+# GLOBAL CANONICAL ENTITY (MASTER ENTITY TABLE)
 # =====================================================
 class GlobalEntity(Base):
     __tablename__ = "global_entities"
@@ -63,6 +63,7 @@ class GlobalEntity(Base):
     aliases = relationship("GlobalEntityAlias", back_populates="entity", cascade="all, delete-orphan")
     sanctions = relationship("SanctionedEntity", back_populates="entity")
     supplier_links = relationship("SupplierEntityLink", back_populates="entity")
+    covered_designations = relationship("CoveredEntity", back_populates="entity")
 
 
 class GlobalEntityAlias(Base):
@@ -117,18 +118,36 @@ class SupplierEntityLink(Base):
 
 
 # =====================================================
-# SANCTIONED ENTITY (LINKED TO GLOBAL ENTITY)
+# SANCTIONED ENTITY (OFAC / BIS / etc.)
 # =====================================================
 class SanctionedEntity(Base):
     __tablename__ = "sanctioned_entities"
 
     id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, nullable=False)
-    source = Column(String, nullable=False)
+    source = Column(String, nullable=False)  # OFAC | BIS | UN | EU | etc.
+    program = Column(String, nullable=True)
 
-    entity_id = Column(Integer, ForeignKey("global_entities.id"), nullable=True)
+    entity_id = Column(Integer, ForeignKey("global_entities.id"), nullable=False)
 
     entity = relationship("GlobalEntity", back_populates="sanctions")
+
+
+# =====================================================
+# SECTION 889 COVERED ENTITY
+# =====================================================
+class CoveredEntity(Base):
+    __tablename__ = "covered_entities"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    designation = Column(String, nullable=False)  # e.g., "Section 889(a)(1)(B)"
+    source = Column(String, default="Section 889")
+
+    entity_id = Column(Integer, ForeignKey("global_entities.id"), nullable=False)
+
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+    entity = relationship("GlobalEntity", back_populates="covered_designations")
 
 
 # =====================================================
@@ -183,6 +202,7 @@ class AuditLog(Base):
     timestamp = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="audit_logs")
+
 
 # =====================================================
 # INGESTION RUN TRACKING (FEED MONITORING)

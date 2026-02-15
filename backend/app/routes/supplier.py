@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, WebSocket
 from sqlalchemy.orm import Session
 from typing import List
 import asyncio
-
+from sqlalchemy import desc
 from app.database import get_db, SessionLocal
 from app.models import Supplier, AssessmentHistory, User
 from app.schemas import SupplierCreate, SupplierResponse
@@ -150,3 +150,29 @@ async def stream_supplier(websocket: WebSocket, supplier_id: int):
         db.close()
         await websocket.send_json(result)
         await asyncio.sleep(5)
+
+
+@router.get("/with-status")
+def list_suppliers_with_status(db: Session = Depends(get_db)):
+    suppliers = db.query(Supplier).all()
+
+    results = []
+
+    for supplier in suppliers:
+        latest_assessment = (
+            db.query(AssessmentHistory)
+            .filter(AssessmentHistory.supplier_id == supplier.id)
+            .order_by(desc(AssessmentHistory.created_at))
+            .first()
+        )
+
+        results.append({
+            "id": supplier.id,
+            "name": supplier.name,
+            "country": supplier.country,
+            "industry": supplier.industry,
+            "latest_status": latest_assessment.overall_status if latest_assessment else None,
+            "risk_score": latest_assessment.risk_score if latest_assessment else None,
+        })
+
+    return results
