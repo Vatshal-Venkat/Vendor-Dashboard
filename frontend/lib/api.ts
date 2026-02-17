@@ -9,6 +9,7 @@ const api = axios.create({
 });
 
 let isRefreshing = false;
+
 let failedQueue: {
   resolve: (value?: unknown) => void;
   reject: (reason?: any) => void;
@@ -16,8 +17,11 @@ let failedQueue: {
 
 const processQueue = (error: any) => {
   failedQueue.forEach((prom) => {
-    if (error) prom.reject(error);
-    else prom.resolve(true);
+    if (error) {
+      prom.reject(error);
+    } else {
+      prom.resolve(true);
+    }
   });
   failedQueue = [];
 };
@@ -30,9 +34,20 @@ api.interceptors.response.use(
         _retry?: boolean;
       };
 
+    const status = error.response?.status;
+    const requestUrl = originalRequest?.url || "";
+
+    const isAuthEndpoint =
+      requestUrl.includes("/auth/login") ||
+      requestUrl.includes("/auth/register") ||
+      requestUrl.includes("/auth/refresh") ||
+      requestUrl.includes("/auth/logout");
+
+    // Only attempt refresh for non-auth endpoints
     if (
-      error.response?.status === 401 &&
-      !originalRequest?._retry
+      status === 401 &&
+      !originalRequest?._retry &&
+      !isAuthEndpoint
     ) {
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
@@ -51,7 +66,12 @@ api.interceptors.response.use(
         return api(originalRequest);
       } catch (refreshError) {
         processQueue(refreshError);
-        window.location.href = "/login";
+
+        // Hard redirect to login if refresh fails
+        if (typeof window !== "undefined") {
+          window.location.href = "/login";
+        }
+
         return Promise.reject(refreshError);
       } finally {
         isRefreshing = false;

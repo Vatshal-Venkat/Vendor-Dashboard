@@ -15,19 +15,38 @@ export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
+  // Redirect if already logged in
   useEffect(() => {
     if (user) {
-      router.push(redirect);
+      router.replace(redirect);
     }
   }, [user, router, redirect]);
 
   const handleLogin = async () => {
+    if (!username.trim() || !password.trim()) {
+      setError("Username and password are required");
+      return;
+    }
+
     try {
+      setSubmitting(true);
       setError("");
-      await login(username, password);
-    } catch {
-      setError("Invalid credentials");
+
+      await login(username.trim(), password.trim());
+
+      // redirect handled by useEffect after user updates
+    } catch (err: any) {
+      if (err?.response?.status === 401) {
+        setError("Invalid credentials");
+      } else if (err?.response?.status === 422) {
+        setError("Invalid request format");
+      } else {
+        setError("Login failed. Please try again.");
+      }
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -37,16 +56,20 @@ export default function LoginPage() {
         <h1 className="text-2xl font-semibold">Login</h1>
 
         {error && (
-          <div className="text-red-500 text-sm">{error}</div>
+          <div className="text-red-500 text-sm">
+            {error}
+          </div>
         )}
 
         <input
+          value={username}
           className="w-full px-4 py-2 bg-[#111a2a] border border-zinc-700"
           placeholder="Username"
           onChange={(e) => setUsername(e.target.value)}
         />
 
         <input
+          value={password}
           type="password"
           className="w-full px-4 py-2 bg-[#111a2a] border border-zinc-700"
           placeholder="Password"
@@ -54,10 +77,11 @@ export default function LoginPage() {
         />
 
         <button
+          disabled={submitting}
           onClick={handleLogin}
-          className="w-full px-4 py-2 border border-white hover:bg-white hover:text-black transition"
+          className="w-full px-4 py-2 border border-white hover:bg-white hover:text-black transition disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Login
+          {submitting ? "Logging in..." : "Login"}
         </button>
 
         <div className="text-sm text-[var(--text-muted)]">

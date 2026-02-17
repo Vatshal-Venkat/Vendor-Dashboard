@@ -5,8 +5,10 @@ import {
   useContext,
   useEffect,
   useState,
+  useRef,
 } from "react";
 import api from "@/lib/api";
+import type { AxiosError } from "axios";
 
 type User = {
   id: number;
@@ -35,17 +37,23 @@ export function AuthProvider({
   const [loading, setLoading] = useState(true);
   const [toast, setToast] = useState<string | null>(null);
 
+  const toastTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // ===============================
+  // Fetch Logged In User
+  // ===============================
   const fetchUser = async () => {
     try {
       const res = await api.get("/auth/me");
       setUser(res.data);
     } catch {
       setUser(null);
-    } finally {
-      setLoading(false);
     }
   };
 
+  // ===============================
+  // Refresh Session
+  // ===============================
   const refreshSession = async () => {
     try {
       await api.post("/auth/refresh");
@@ -55,24 +63,60 @@ export function AuthProvider({
     }
   };
 
+  // ===============================
+  // Initial Load
+  // ===============================
   useEffect(() => {
-    fetchUser();
+    const init = async () => {
+      try {
+        await fetchUser();
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    init();
   }, []);
 
+  // ===============================
+  // Login
+  // ===============================
   const login = async (username: string, password: string) => {
-    await api.post("/auth/login", { username, password });
-    await fetchUser();
-    showToast("Successfully Logged In");
+    try {
+      await api.post("/auth/login", {
+        username: username.trim(),
+        password: password.trim(),
+      });
+
+      await fetchUser();
+      showToast("Successfully Logged In");
+    } catch (error) {
+      const err = error as AxiosError;
+      throw err;
+    }
   };
 
+  // ===============================
+  // Register
+  // ===============================
   const register = async (username: string, password: string) => {
-    await api.post("/auth/register", {
-      username,
-      password,
-    });
-    await login(username, password);
+    try {
+      await api.post("/auth/register", {
+        username: username.trim(),
+        password: password.trim(),
+      });
+
+      // Auto login after register
+      await login(username, password);
+    } catch (error) {
+      const err = error as AxiosError;
+      throw err;
+    }
   };
 
+  // ===============================
+  // Logout
+  // ===============================
   const logout = async () => {
     try {
       await api.post("/auth/logout");
@@ -82,9 +126,17 @@ export function AuthProvider({
     }
   };
 
+  // ===============================
+  // Toast
+  // ===============================
   const showToast = (message: string) => {
+    if (toastTimeoutRef.current) {
+      clearTimeout(toastTimeoutRef.current);
+    }
+
     setToast(message);
-    setTimeout(() => {
+
+    toastTimeoutRef.current = setTimeout(() => {
       setToast(null);
     }, 3000);
   };
@@ -103,11 +155,12 @@ export function AuthProvider({
     >
       {toast && (
         <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50">
-          <div className="border border-green-500 text-green-500 px-6 py-3 rounded-md bg-transparent backdrop-blur-sm">
+          <div className="border border-green-500 text-green-500 px-6 py-3 rounded-md bg-black/70 backdrop-blur-md">
             {toast}
           </div>
         </div>
       )}
+
       {children}
     </AuthContext.Provider>
   );
