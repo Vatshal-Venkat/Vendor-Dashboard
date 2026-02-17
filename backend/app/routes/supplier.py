@@ -26,12 +26,6 @@ def create_supplier(
 ):
     from app.services.entity_resolution_service import normalize, resolve_supplier_entity
 
-    if not current_user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Not authenticated"
-        )
-
     normalized = normalize(supplier.name)
 
     existing = (
@@ -94,109 +88,22 @@ def list_suppliers(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    if not current_user:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-
-    suppliers = (
+    return (
         db.query(Supplier)
         .filter(Supplier.organization_id == current_user.organization_id)
         .all()
     )
 
-    return suppliers
-
-
-# =====================================================
-# SUPPLIER ASSESSMENT
-# =====================================================
-@router.get("/{supplier_id}/assessment")
-def supplier_assessment(
-    supplier_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    if not current_user:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-
-    supplier = (
-        db.query(Supplier)
-        .filter(
-            Supplier.id == supplier_id,
-            Supplier.organization_id == current_user.organization_id,
-        )
-        .first()
-    )
-
-    if not supplier:
-        raise HTTPException(status_code=404, detail="Supplier not found")
-
-    result = run_assessment(supplier_id, db)
-
-    log_action(
-        db=db,
-        user_id=current_user.id,
-        action="RUN_ASSESSMENT",
-        resource_type="Supplier",
-        resource_id=supplier_id,
-        details={"result": result.get("overall_status")},
-    )
-
-    return result
-
-
-# =====================================================
-# SUPPLIER HISTORY (TENANT SAFE)
-# =====================================================
-@router.get("/{supplier_id}/history")
-def supplier_history(
-    supplier_id: int,
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user),
-):
-    if not current_user:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-
-    history = (
-        db.query(AssessmentHistory)
-        .join(Supplier)
-        .filter(
-            Supplier.id == supplier_id,
-            Supplier.organization_id == current_user.organization_id,
-        )
-        .order_by(AssessmentHistory.created_at.asc())
-        .all()
-    )
-
-    return history
-
-
-# =====================================================
-# LIVE STREAM ASSESSMENT (No Auth Enforcement Here)
-# =====================================================
-@router.websocket("/stream/{supplier_id}")
-async def stream_supplier(websocket: WebSocket, supplier_id: int):
-    await websocket.accept()
-
-    while True:
-        db = SessionLocal()
-        result = run_assessment(supplier_id, db)
-        db.close()
-
-        await websocket.send_json(result)
-        await asyncio.sleep(5)
-
 
 # =====================================================
 # LIST SUPPLIERS WITH LATEST STATUS
+# (STATIC ROUTE FIRST — IMPORTANT)
 # =====================================================
 @router.get("/with-status")
 def list_suppliers_with_status(
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
-    if not current_user:
-        raise HTTPException(status_code=401, detail="Not authenticated")
-
     suppliers = (
         db.query(Supplier)
         .filter(Supplier.organization_id == current_user.organization_id)
@@ -226,7 +133,7 @@ def list_suppliers_with_status(
 
 
 # =====================================================
-# IDENTITY RESOLUTION (Placeholder)
+# IDENTITY RESOLUTION (STATIC ROUTE FIRST — IMPORTANT)
 # =====================================================
 @router.post("/resolve")
 def resolve_supplier_identity(payload: dict):
@@ -241,3 +148,77 @@ def resolve_supplier_identity(payload: dict):
             }
         ]
     }
+
+
+# =====================================================
+# SUPPLIER ASSESSMENT (STRICT INT PATH)
+# =====================================================
+@router.get("/{supplier_id:int}/assessment")
+def supplier_assessment(
+    supplier_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    supplier = (
+        db.query(Supplier)
+        .filter(
+            Supplier.id == supplier_id,
+            Supplier.organization_id == current_user.organization_id,
+        )
+        .first()
+    )
+
+    if not supplier:
+        raise HTTPException(status_code=404, detail="Supplier not found")
+
+    result = run_assessment(supplier_id, db)
+
+    log_action(
+        db=db,
+        user_id=current_user.id,
+        action="RUN_ASSESSMENT",
+        resource_type="Supplier",
+        resource_id=supplier_id,
+        details={"result": result.get("overall_status")},
+    )
+
+    return result
+
+
+# =====================================================
+# SUPPLIER HISTORY (STRICT INT PATH)
+# =====================================================
+@router.get("/{supplier_id:int}/history")
+def supplier_history(
+    supplier_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    history = (
+        db.query(AssessmentHistory)
+        .join(Supplier)
+        .filter(
+            Supplier.id == supplier_id,
+            Supplier.organization_id == current_user.organization_id,
+        )
+        .order_by(AssessmentHistory.created_at.asc())
+        .all()
+    )
+
+    return history
+
+
+# =====================================================
+# LIVE STREAM ASSESSMENT
+# =====================================================
+@router.websocket("/stream/{supplier_id}")
+async def stream_supplier(websocket: WebSocket, supplier_id: int):
+    await websocket.accept()
+
+    while True:
+        db = SessionLocal()
+        result = run_assessment(supplier_id, db)
+        db.close()
+
+        await websocket.send_json(result)
+        await asyncio.sleep(5)
