@@ -10,19 +10,44 @@ const ForceGraph2D = dynamic(
   { ssr: false }
 ) as React.ComponentType<ForceGraphProps>;
 
+type GraphNode = {
+  id: string;
+  label?: string;
+};
+
+type GraphLink = {
+  source: string;
+  target: string;
+  type?: string;
+};
+
 export default function TrustGraph({ name }: { name: string }) {
-  const [data, setData] = useState({
-    nodes: [] as any[],
-    links: [] as any[]
+  const [data, setData] = useState<{
+    nodes: GraphNode[];
+    links: GraphLink[];
+  }>({
+    nodes: [],
+    links: [],
   });
 
   useEffect(() => {
-    api.get(`/graph/${name}`).then(res => {
-      setData({
-        nodes: res.data.nodes,
-        links: res.data.edges
-      });
-    });
+    const fetchGraph = async () => {
+      try {
+        const res = await api.get(`/graph/${name}`);
+
+        setData({
+          nodes: res.data.nodes || [],
+          links: res.data.links || [],
+        });
+      } catch (err) {
+        console.error("Graph fetch error:", err);
+        setData({ nodes: [], links: [] });
+      }
+    };
+
+    if (name) {
+      fetchGraph();
+    }
   }, [name]);
 
   return (
