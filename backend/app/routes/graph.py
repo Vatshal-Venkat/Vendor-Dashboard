@@ -9,28 +9,50 @@ def get_graph(entity_name: str):
     with get_session() as session:
         result = session.run(
             """
-            MATCH (n {name: $name})-[r*1..2]-(m)
-            RETURN n, r, m
+            MATCH path = (n {name: $name})-[*1..2]-(m)
+            RETURN path
             """,
             name=entity_name
         )
 
         nodes = {}
-        edges = []
+        links = []
 
         for record in result:
-            n = record["n"]
-            m = record["m"]
+            path = record["path"]
 
-            nodes[n["name"]] = {"id": n["name"], "label": list(n.labels)[0]}
-            nodes[m["name"]] = {"id": m["name"], "label": list(m.labels)[0]}
+            if not path:
+                continue
 
-            edges.append({
-                "from": n["name"],
-                "to": m["name"]
-            })
+            # Add all nodes in path
+            for node in path.nodes:
+                node_name = node.get("name") or node.get("canonical_name")
+                if not node_name:
+                    continue
+
+                nodes[node_name] = {
+                    "id": node_name,
+                    "label": list(node.labels)[0] if node.labels else "Unknown"
+                }
+
+            # Add all relationships in path
+            for rel in path.relationships:
+                start_node = rel.start_node
+                end_node = rel.end_node
+
+                start_name = start_node.get("name") or start_node.get("canonical_name")
+                end_name = end_node.get("name") or end_node.get("canonical_name")
+
+                if not start_name or not end_name:
+                    continue
+
+                links.append({
+                    "source": start_name,
+                    "target": end_name,
+                    "type": rel.type
+                })
 
         return {
             "nodes": list(nodes.values()),
-            "edges": edges
+            "links": links
         }
