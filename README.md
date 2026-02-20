@@ -161,8 +161,4 @@ Neo4j is used for multi-hop relationship analysis.
 
 ------------------------------------------------------------------------
 
-------------------------------------------------------------------------
 
-## License
-
-This project is for educational and demonstration purposes.
