@@ -7,6 +7,7 @@ from sqlalchemy import (
     Boolean,
     JSON,
     UniqueConstraint,
+    BigInteger,
     Float,
 )
 from sqlalchemy.orm import relationship
@@ -83,24 +84,53 @@ class GlobalEntityAlias(Base):
 # =====================================================
 class Supplier(Base):
     __tablename__ = "suppliers"
+
     __table_args__ = (
-        UniqueConstraint("organization_id", "normalized_name","country", name="uq_supplier_org_normalized"),
+        UniqueConstraint(
+            "organization_id",
+            "normalized_name",
+            "country",
+            name="uq_supplier_org_normalized",
+        ),
     )
 
     id = Column(Integer, primary_key=True, index=True)
 
+    # Core identity
     name = Column(String, nullable=False)
     normalized_name = Column(String, index=True, nullable=False)
 
     country = Column(String, nullable=True)
     industry = Column(String, nullable=True)
 
-    organization_id = Column(Integer, ForeignKey("organizations.id"), nullable=False)
+    # Dataset enrichment fields
+    annual_revenue = Column(BigInteger, nullable=True)
+    ownership_type = Column(String, nullable=True)
+    parent_company = Column(String, nullable=True)
+    tier_level = Column(Integer, nullable=True)
+
+    # Multi-tenant + Global separation
+    organization_id = Column(
+        Integer,
+        ForeignKey("organizations.id"),
+        nullable=True,   # 🔥 must allow NULL for global suppliers
+    )
+
+    is_global = Column(Boolean, default=False, nullable=False)
+
     created_at = Column(DateTime, default=datetime.utcnow)
 
+    # Relationships
     organization = relationship("Organization", back_populates="suppliers")
-    assessments = relationship("AssessmentHistory", back_populates="supplier", cascade="all, delete-orphan")
-    entity_links = relationship("SupplierEntityLink", back_populates="supplier")
+    assessments = relationship(
+        "AssessmentHistory",
+        back_populates="supplier",
+        cascade="all, delete-orphan",
+    )
+    entity_links = relationship(
+        "SupplierEntityLink",
+        back_populates="supplier",
+    )
 
 
 class SupplierEntityLink(Base):

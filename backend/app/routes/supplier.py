@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, WebSocket, HTTPException, Query
 from sqlalchemy.orm import Session
 from typing import List, Optional
 import asyncio
-from sqlalchemy import desc, func, text, case
+from sqlalchemy import desc, func, text, case, or_
 from sqlalchemy.exc import IntegrityError
 from app.services.supplier_comparison_service import compare_suppliers
 from app.database import get_db, SessionLocal
@@ -23,6 +23,7 @@ from app.graph.graph_client import get_session
 from app.services.entity_resolution_service import normalize
 
 router = APIRouter(prefix="/suppliers", tags=["Suppliers"])
+
 
 
 # =====================================================
@@ -51,7 +52,10 @@ def search_suppliers(
             similarity_score.label("score")
         )
         .filter(
-            Supplier.organization_id == current_user.organization_id
+            or_(
+                Supplier.organization_id == current_user.organization_id,
+                Supplier.is_global == True  # 🔥 include seeded suppliers
+            )
         )
     )
 
@@ -86,6 +90,7 @@ def search_suppliers(
 
     return suppliers
 
+
 # =====================================================
 # CREATE SUPPLIER
 # =====================================================
@@ -116,11 +121,16 @@ def create_supplier(
         )
 
     db_supplier = Supplier(
-        name=supplier.name,
-        normalized_name=normalized,
-        country=supplier.country,
-        industry=supplier.industry,
-        organization_id=current_user.organization_id,
+        name=row["name"],
+        normalized_name=normalize(row["name"]),
+        country=row["country"],
+        industry=row["industry"],
+        annual_revenue=row["annual_revenue_usd"],
+        ownership_type=row["ownership_type"],
+        parent_company=row["parent_company"],
+        tier_level=row["tier_level"],
+        is_global=True,         
+        organization_id=None
     )
 
     try:
@@ -152,19 +162,31 @@ def create_supplier(
 
     return db_supplier
 
+
 # =====================================================
 # LIST SUPPLIERS (BASIC)
 # =====================================================
 @router.get("/", response_model=List[SupplierResponse])
 def list_suppliers(
+    limit: int = 50,
+    offset: int = 0,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
 ):
     return (
         db.query(Supplier)
-        .filter(Supplier.organization_id == current_user.organization_id)
+        .filter(
+            or_(
+                Supplier.organization_id == current_user.organization_id,
+                Supplier.is_global == True  # 🔥 include seeded suppliers
+            )
+        )
+        .order_by(desc(Supplier.id))
+        .limit(limit)
+        .offset(offset)
         .all()
     )
+
 
 # =====================================================
 # LIST SUPPLIERS WITH LATEST STATUS
@@ -176,7 +198,12 @@ def list_suppliers_with_status(
 ):
     suppliers = (
         db.query(Supplier)
-        .filter(Supplier.organization_id == current_user.organization_id)
+        .filter(
+            or_(
+                Supplier.organization_id == current_user.organization_id,
+                Supplier.is_global == True
+            )
+        )
         .all()
     )
 
@@ -216,10 +243,14 @@ def resolve_supplier_identity(
     if len(name) < 3:
         return {"matches": []}
 
-    # 🔒 Only search within same organization
     existing_suppliers = (
         db.query(Supplier)
-        .filter(Supplier.organization_id == current_user.organization_id)
+        .filter(
+            or_(
+                Supplier.organization_id == current_user.organization_id,
+                Supplier.is_global == True
+            )
+        )
         .all()
     )
 
@@ -250,7 +281,10 @@ def get_supplier_profile(
         db.query(Supplier)
         .filter(
             Supplier.id == supplier_id,
-            Supplier.organization_id == current_user.organization_id,
+            or_(
+                Supplier.organization_id == current_user.organization_id,
+                Supplier.is_global == True
+            ),
         )
         .first()
     )
@@ -370,7 +404,10 @@ def supplier_assessment(
         db.query(Supplier)
         .filter(
             Supplier.id == supplier_id,
-            Supplier.organization_id == current_user.organization_id,
+            or_(
+                Supplier.organization_id == current_user.organization_id,
+                Supplier.is_global == True
+            ),
         )
         .first()
     )
@@ -406,7 +443,10 @@ def supplier_history(
         .join(Supplier)
         .filter(
             Supplier.id == supplier_id,
-            Supplier.organization_id == current_user.organization_id,
+            or_(
+                Supplier.organization_id == current_user.organization_id,
+                Supplier.is_global == True
+            ),
         )
         .order_by(AssessmentHistory.created_at.asc())
         .all()

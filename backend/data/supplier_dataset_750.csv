@@ -1,0 +1,300 @@
+supplier_id,name,country,industry,annual_revenue_usd,ownership_type,parent_company,tier_level,sanctions_flag,high_risk_country_flag,risk_notes
+SUP-1000,Eastern Industries,China,Metals & Mining,212696843,State-Owned,,2,0,0,
+SUP-1001,Vertex Manufacturing,Vietnam,Semiconductors,1572087080,Subsidiary,PARENT-32,3,0,0,
+SUP-1002,Western Industries,South Korea,Telecommunications,1786132953,State-Owned,,3,0,0,
+SUP-1003,Advanced Industries,India,Pharmaceuticals,1665151621,State-Owned,,1,0,0,
+SUP-1004,Advanced Industries,Brazil,Telecommunications,978691209,State-Owned,,1,0,0,
+SUP-1005,Eastern Trading,Germany,Telecommunications,1512147647,Private,,3,0,0,
+SUP-1006,United Solutions,France,Pharmaceuticals,355904183,Subsidiary,PARENT-70,2,1,0,Sanctions Match
+SUP-1007,Omega Systems,UK,Energy,1815010706,Private,,1,0,0,
+SUP-1008,Global Trading,Brazil,Telecommunications,147138944,Public,,3,0,0,
+SUP-1009,Eastern Systems,UK,Logistics,854613032,Subsidiary,PARENT-68,1,0,0,
+SUP-1010,United Systems,France,Consumer Electronics,1162444916,State-Owned,,3,0,0,
+SUP-1011,Vertex Logistics,South Africa,Industrial Machinery,862706059,State-Owned,,1,0,1,High-Risk Country
+SUP-1012,United Solutions,Japan,Defense,1628029829,Private,,1,0,0,
+SUP-1013,United Holdings,Vietnam,Metals & Mining,1285778650,Private,,2,0,0,
+SUP-1014,Western Corp,Japan,Consumer Electronics,544907702,Private,,3,0,0,
+SUP-1015,Prime Solutions,Vietnam,Telecommunications,1655553201,State-Owned,,1,0,0,
+SUP-1016,National Logistics,United States,Logistics,11969260,State-Owned,,3,0,0,
+SUP-1017,United Solutions,South Africa,Defense,1874424395,State-Owned,,3,0,1,High-Risk Country
+SUP-1018,Omega Corp,Germany,Automotive,807973878,Public,,3,0,0,
+SUP-1019,Omega Technologies,Singapore,Energy,1054272770,Private,,1,0,0,
+SUP-1020,Eastern Manufacturing,Germany,Semiconductors,522267796,Private,,1,0,0,
+SUP-1021,Alpha Industries,Vietnam,Consumer Electronics,1649616922,Public,,1,0,0,
+SUP-1022,Alpha Solutions,United States,Telecommunications,1138170817,Subsidiary,PARENT-139,1,0,0,
+SUP-1023,Advanced Manufacturing,Brazil,Energy,945812752,Subsidiary,PARENT-64,1,0,0,
+SUP-1024,Advanced Industries,Russia,Semiconductors,1268383345,Public,,3,0,1,High-Risk Country
+SUP-1025,Advanced Technologies,China,Semiconductors,496648746,Private,,1,1,0,Sanctions Match
+SUP-1026,Eastern Industries,South Korea,Pharmaceuticals,603025373,Subsidiary,PARENT-139,1,0,0,
+SUP-1027,United Corp,Singapore,Logistics,526832596,Subsidiary,PARENT-49,2,1,0,Sanctions Match
+SUP-1028,Prime Industries,UK,Metals & Mining,765848239,Subsidiary,PARENT-120,2,0,0,
+SUP-1029,Global Industries,India,Metals & Mining,1568826773,State-Owned,,1,0,0,
+SUP-1030,Advanced Systems,Germany,Consumer Electronics,968390270,Public,,2,1,0,Sanctions Match
+SUP-1031,United Manufacturing,Japan,Pharmaceuticals,1882944287,Private,,2,0,0,
+SUP-1032,Omega Industries,India,Consumer Electronics,1800355576,Private,,1,1,0,Sanctions Match
+SUP-1033,Advanced Holdings,Brazil,Logistics,1038709343,Public,,2,0,0,
+SUP-1034,Global Holdings,Brazil,Semiconductors,843424338,State-Owned,,2,0,0,
+SUP-1035,National Logistics,France,Consumer Electronics,1426357808,Subsidiary,PARENT-49,1,0,0,
+SUP-1036,National Systems,India,Industrial Machinery,1584983554,Private,,3,0,0,
+SUP-1037,Eastern Technologies,India,Industrial Machinery,1028895541,Public,,1,0,0,
+SUP-1038,Omega Industries,Turkey,Automotive,152148436,Private,,3,0,1,High-Risk Country
+SUP-1039,Advanced Logistics,China,Industrial Machinery,533743434,Private,,3,0,0,
+SUP-1040,Prime Logistics,UK,Industrial Machinery,1218815577,State-Owned,,2,0,0,
+SUP-1041,Advanced Trading,Germany,Telecommunications,854943635,Public,,3,0,0,
+SUP-1042,National Energy,Russia,Defense,25004793,Subsidiary,PARENT-145,3,0,1,High-Risk Country
+SUP-1043,Prime Industries,South Korea,Pharmaceuticals,1091379110,State-Owned,,1,0,0,
+SUP-1044,Eastern Industries,South Africa,Pharmaceuticals,798553385,State-Owned,,1,0,1,High-Risk Country
+SUP-1045,Alpha Solutions,France,Telecommunications,1318567990,Private,,3,0,0,
+SUP-1046,Omega Manufacturing,South Africa,Defense,1890763298,Public,,2,0,1,High-Risk Country
+SUP-1047,Prime Industries,France,Consumer Electronics,338821845,State-Owned,,2,0,0,
+SUP-1048,Vertex Systems,France,Energy,442221893,State-Owned,,3,0,0,
+SUP-1049,Alpha Manufacturing,South Africa,Semiconductors,203209444,Subsidiary,PARENT-12,2,0,1,High-Risk Country
+SUP-1050,Global Trading,Vietnam,Automotive,1373190554,State-Owned,,1,0,0,
+SUP-1051,Alpha Solutions,France,Metals & Mining,1209538328,Private,,1,0,0,
+SUP-1052,Prime Holdings,South Korea,Semiconductors,1797279157,State-Owned,,3,0,0,
+SUP-1053,Omega Holdings,Brazil,Automotive,94826799,State-Owned,,2,0,0,
+SUP-1054,Global Trading,Germany,Pharmaceuticals,1437228605,Private,,2,0,0,
+SUP-1055,Omega Logistics,Singapore,Automotive,1993062668,Public,,1,0,0,
+SUP-1056,United Logistics,India,Automotive,1586760148,State-Owned,,2,0,0,
+SUP-1057,Advanced Manufacturing,United States,Defense,826502093,Private,,2,0,0,
+SUP-1058,Advanced Systems,Turkey,Logistics,755885745,State-Owned,,1,0,1,High-Risk Country
+SUP-1059,Advanced Technologies,UK,Pharmaceuticals,860699176,State-Owned,,2,0,0,
+SUP-1060,Prime Manufacturing,Russia,Consumer Electronics,863302799,State-Owned,,1,0,1,High-Risk Country
+SUP-1061,Prime Manufacturing,United States,Industrial Machinery,575084674,Private,,1,0,0,
+SUP-1062,Vertex Logistics,Russia,Energy,942148728,Private,,2,0,1,High-Risk Country
+SUP-1063,Vertex Systems,UAE,Semiconductors,1527104808,Subsidiary,PARENT-134,1,0,0,
+SUP-1064,Omega Systems,Russia,Metals & Mining,155267605,State-Owned,,3,0,1,High-Risk Country
+SUP-1065,Eastern Industries,France,Telecommunications,1094037295,State-Owned,,3,0,0,
+SUP-1066,Western Trading,Brazil,Telecommunications,1195591741,Public,,1,0,0,
+SUP-1067,Western Logistics,UK,Automotive,1326808215,State-Owned,,2,0,0,
+SUP-1068,Omega Technologies,UAE,Telecommunications,456363872,Subsidiary,PARENT-83,3,0,0,
+SUP-1069,Alpha Energy,Japan,Pharmaceuticals,1102737799,Subsidiary,PARENT-44,3,0,0,
+SUP-1070,Prime Manufacturing,South Korea,Industrial Machinery,724811309,Private,,1,0,0,
+SUP-1071,National Systems,Vietnam,Pharmaceuticals,321440229,Private,,1,0,0,
+SUP-1072,Advanced Energy,Singapore,Defense,982998770,Subsidiary,PARENT-148,3,0,0,
+SUP-1073,Advanced Logistics,Japan,Metals & Mining,528952602,Public,,3,0,0,
+SUP-1074,Global Industries,Vietnam,Metals & Mining,474957763,Public,,3,0,0,
+SUP-1075,Omega Energy,India,Consumer Electronics,540149219,Private,,2,0,0,
+SUP-1076,United Energy,UK,Consumer Electronics,1205282924,State-Owned,,2,0,0,
+SUP-1077,Vertex Solutions,Brazil,Consumer Electronics,962592179,Public,,3,0,0,
+SUP-1078,Alpha Energy,UAE,Pharmaceuticals,1808591814,State-Owned,,3,0,0,
+SUP-1079,Alpha Systems,UAE,Logistics,171394235,State-Owned,,1,0,0,
+SUP-1080,National Trading,Russia,Consumer Electronics,178039205,Public,,1,0,1,High-Risk Country
+SUP-1081,Advanced Logistics,France,Automotive,1522023559,Public,,1,0,0,
+SUP-1082,Western Logistics,Russia,Consumer Electronics,1005564829,Subsidiary,PARENT-53,1,0,1,High-Risk Country
+SUP-1083,Western Logistics,South Africa,Industrial Machinery,1498624247,Private,,3,0,1,High-Risk Country
+SUP-1084,Western Energy,India,Energy,646265791,Subsidiary,PARENT-138,2,0,0,
+SUP-1085,Omega Corp,South Africa,Pharmaceuticals,1053464828,Public,,2,0,1,High-Risk Country
+SUP-1086,Western Energy,India,Metals & Mining,726832695,Subsidiary,PARENT-43,3,0,0,
+SUP-1087,Alpha Holdings,Singapore,Consumer Electronics,62910012,Subsidiary,PARENT-145,3,0,0,
+SUP-1088,Global Industries,UK,Metals & Mining,296412420,Subsidiary,PARENT-13,1,0,0,
+SUP-1089,National Logistics,Russia,Pharmaceuticals,981459372,State-Owned,,2,1,1,Sanctions Match; High-Risk Country
+SUP-1090,Western Manufacturing,Vietnam,Metals & Mining,546748982,Private,,2,0,0,
+SUP-1091,Global Solutions,India,Energy,486513427,Private,,3,0,0,
+SUP-1092,Global Technologies,Germany,Pharmaceuticals,1807230236,Private,,3,0,0,
+SUP-1093,United Systems,United States,Logistics,1442651928,Private,,3,0,0,
+SUP-1094,Advanced Energy,France,Telecommunications,1651901134,State-Owned,,1,0,0,
+SUP-1095,Vertex Corp,France,Defense,1675295344,Public,,2,1,0,Sanctions Match
+SUP-1096,Prime Corp,India,Telecommunications,1241514049,Subsidiary,PARENT-51,2,0,0,
+SUP-1097,Prime Corp,France,Pharmaceuticals,223831382,State-Owned,,3,0,0,
+SUP-1098,Vertex Industries,Vietnam,Industrial Machinery,1685696611,Private,,2,0,0,
+SUP-1099,Omega Logistics,UK,Energy,153083460,State-Owned,,1,0,0,
+SUP-1100,Western Energy,China,Metals & Mining,782792886,Subsidiary,PARENT-40,3,0,0,
+SUP-1101,Western Holdings,France,Consumer Electronics,1401846668,State-Owned,,3,0,0,
+SUP-1102,Omega Energy,Japan,Metals & Mining,1778251547,State-Owned,,2,0,0,
+SUP-1103,Advanced Industries,UAE,Logistics,528692741,Subsidiary,PARENT-98,3,0,0,
+SUP-1104,Eastern Technologies,Japan,Energy,395498115,Subsidiary,PARENT-91,1,1,0,Sanctions Match
+SUP-1105,National Trading,UAE,Industrial Machinery,1510780637,State-Owned,,3,0,0,
+SUP-1106,Global Solutions,Germany,Defense,523308168,Subsidiary,PARENT-143,2,0,0,
+SUP-1107,Advanced Energy,UK,Logistics,967447510,Private,,1,0,0,
+SUP-1108,National Systems,Brazil,Pharmaceuticals,662572445,State-Owned,,2,0,0,
+SUP-1109,Omega Solutions,Russia,Metals & Mining,1606884147,State-Owned,,2,0,1,High-Risk Country
+SUP-1110,Alpha Manufacturing,UAE,Telecommunications,500076677,Private,,3,0,0,
+SUP-1111,Advanced Trading,China,Consumer Electronics,1641789726,Public,,1,0,0,
+SUP-1112,Advanced Energy,UAE,Industrial Machinery,1637534022,State-Owned,,1,0,0,
+SUP-1113,Advanced Manufacturing,Germany,Energy,390347785,State-Owned,,1,0,0,
+SUP-1114,Omega Holdings,UAE,Semiconductors,122093731,State-Owned,,3,1,0,Sanctions Match
+SUP-1115,United Energy,China,Semiconductors,1237793533,State-Owned,,2,0,0,
+SUP-1116,Alpha Energy,Russia,Automotive,115330668,State-Owned,,2,0,1,High-Risk Country
+SUP-1117,Prime Industries,Brazil,Logistics,164090251,Private,,1,0,0,
+SUP-1118,United Corp,UAE,Defense,537986017,Private,,3,0,0,
+SUP-1119,Western Corp,Singapore,Industrial Machinery,489659429,Subsidiary,PARENT-114,2,0,0,
+SUP-1120,National Corp,Brazil,Telecommunications,1226122481,Private,,3,0,0,
+SUP-1121,Prime Systems,UK,Pharmaceuticals,573323224,Private,,1,0,0,
+SUP-1122,Advanced Holdings,South Korea,Defense,341151245,Private,,2,0,0,
+SUP-1123,Alpha Corp,Japan,Telecommunications,75093565,Public,,2,0,0,
+SUP-1124,National Energy,China,Pharmaceuticals,1989083867,State-Owned,,3,0,0,
+SUP-1125,Vertex Systems,Brazil,Defense,1174438810,Public,,3,0,0,
+SUP-1126,United Manufacturing,Turkey,Automotive,158351463,Private,,1,0,1,High-Risk Country
+SUP-1127,National Corp,France,Industrial Machinery,1983245899,State-Owned,,2,0,0,
+SUP-1128,Prime Energy,France,Telecommunications,1507666640,Subsidiary,PARENT-129,2,0,0,
+SUP-1129,Omega Energy,Japan,Defense,1289273955,Private,,2,0,0,
+SUP-1130,Eastern Corp,UAE,Semiconductors,201122998,Public,,3,0,0,
+SUP-1131,Vertex Corp,India,Telecommunications,1242480981,Private,,1,0,0,
+SUP-1132,Alpha Solutions,UK,Logistics,1972251328,State-Owned,,1,0,0,
+SUP-1133,Vertex Logistics,UK,Logistics,200941574,Subsidiary,PARENT-105,2,0,0,
+SUP-1134,Eastern Trading,UK,Defense,1846967800,Public,,2,0,0,
+SUP-1135,Western Energy,UAE,Metals & Mining,1752119758,Private,,2,0,0,
+SUP-1136,Prime Trading,UAE,Energy,253939737,Subsidiary,PARENT-1,3,0,0,
+SUP-1137,Omega Energy,Brazil,Semiconductors,407830441,State-Owned,,3,0,0,
+SUP-1138,Alpha Energy,Vietnam,Semiconductors,442137994,State-Owned,,3,0,0,
+SUP-1139,United Manufacturing,Japan,Logistics,265760539,Private,,3,0,0,
+SUP-1140,Vertex Systems,France,Automotive,672330844,Private,,3,0,0,
+SUP-1141,Western Industries,Germany,Defense,995951798,Private,,3,0,0,
+SUP-1142,United Energy,South Africa,Telecommunications,1097794330,State-Owned,,2,1,1,Sanctions Match; High-Risk Country
+SUP-1143,Alpha Energy,Germany,Logistics,1188832736,Public,,2,0,0,
+SUP-1144,Advanced Corp,South Korea,Automotive,1860483716,Private,,2,0,0,
+SUP-1145,Western Trading,South Africa,Consumer Electronics,578748917,Private,,2,0,1,High-Risk Country
+SUP-1146,National Corp,Singapore,Logistics,1863132986,Public,,2,0,0,
+SUP-1147,Omega Energy,Russia,Energy,1190233628,Subsidiary,PARENT-83,2,0,1,High-Risk Country
+SUP-1148,Advanced Systems,Singapore,Metals & Mining,506571522,Subsidiary,PARENT-82,1,0,0,
+SUP-1149,Alpha Logistics,Brazil,Automotive,1068710167,Private,,1,0,0,
+SUP-1150,Omega Corp,Russia,Defense,1882309531,Subsidiary,PARENT-135,1,0,1,High-Risk Country
+SUP-1151,Alpha Technologies,France,Automotive,885422375,Public,,1,0,0,
+SUP-1152,Alpha Manufacturing,Russia,Industrial Machinery,1492571806,Subsidiary,PARENT-21,3,0,1,High-Risk Country
+SUP-1153,Eastern Solutions,Brazil,Energy,1351040979,Subsidiary,PARENT-10,3,0,0,
+SUP-1154,Vertex Industries,Germany,Telecommunications,493523064,Private,,2,0,0,
+SUP-1155,Prime Industries,Japan,Automotive,1495356149,State-Owned,,1,0,0,
+SUP-1156,Global Trading,Vietnam,Semiconductors,635002509,State-Owned,,2,0,0,
+SUP-1157,Western Holdings,Germany,Consumer Electronics,889874385,Public,,1,0,0,
+SUP-1158,United Industries,Singapore,Metals & Mining,1335817877,Public,,2,0,0,
+SUP-1159,Vertex Holdings,Germany,Logistics,1374889762,State-Owned,,2,1,0,Sanctions Match
+SUP-1160,National Technologies,South Africa,Logistics,1940332502,State-Owned,,3,0,1,High-Risk Country
+SUP-1161,Omega Holdings,China,Logistics,747096516,State-Owned,,3,0,0,
+SUP-1162,Western Manufacturing,Japan,Telecommunications,432815242,Subsidiary,PARENT-28,2,0,0,
+SUP-1163,Advanced Logistics,Singapore,Energy,1239399230,State-Owned,,3,1,0,Sanctions Match
+SUP-1164,National Technologies,Turkey,Metals & Mining,594442138,Private,,3,0,1,High-Risk Country
+SUP-1165,Global Corp,France,Logistics,1793507918,State-Owned,,1,0,0,
+SUP-1166,Vertex Trading,Germany,Pharmaceuticals,1338353631,State-Owned,,3,0,0,
+SUP-1167,United Industries,South Africa,Semiconductors,668428304,Subsidiary,PARENT-149,1,0,1,High-Risk Country
+SUP-1168,Eastern Holdings,China,Telecommunications,706623981,Subsidiary,PARENT-52,1,0,0,
+SUP-1169,United Solutions,South Africa,Energy,1144996799,State-Owned,,1,0,1,High-Risk Country
+SUP-1170,National Energy,Vietnam,Telecommunications,1608223987,State-Owned,,1,0,0,
+SUP-1171,Alpha Industries,United States,Pharmaceuticals,1852137867,Subsidiary,PARENT-94,3,0,0,
+SUP-1172,Prime Logistics,India,Telecommunications,1157280268,Private,,2,0,0,
+SUP-1173,Eastern Manufacturing,Singapore,Metals & Mining,1771127701,State-Owned,,1,0,0,
+SUP-1174,Advanced Energy,India,Industrial Machinery,1903879861,State-Owned,,3,0,0,
+SUP-1175,Advanced Industries,UK,Logistics,1957895078,State-Owned,,3,0,0,
+SUP-1176,Western Industries,United States,Semiconductors,84912437,State-Owned,,2,0,0,
+SUP-1177,Prime Industries,Germany,Consumer Electronics,296336327,Subsidiary,PARENT-95,2,0,0,
+SUP-1178,Omega Logistics,Singapore,Automotive,1906411630,Subsidiary,PARENT-26,3,0,0,
+SUP-1179,Alpha Corp,Brazil,Telecommunications,75257689,State-Owned,,1,0,0,
+SUP-1180,Alpha Energy,Germany,Energy,218362429,State-Owned,,3,0,0,
+SUP-1181,Eastern Technologies,Brazil,Telecommunications,412610773,Private,,2,0,0,
+SUP-1182,Prime Systems,UK,Industrial Machinery,50864788,Private,,2,0,0,
+SUP-1183,Advanced Holdings,Vietnam,Industrial Machinery,445675619,Private,,3,0,0,
+SUP-1184,Advanced Corp,Germany,Pharmaceuticals,710576259,Public,,3,0,0,
+SUP-1185,Global Manufacturing,Turkey,Automotive,284155978,State-Owned,,1,0,1,High-Risk Country
+SUP-1186,Prime Technologies,United States,Semiconductors,774319430,Public,,3,0,0,
+SUP-1187,Eastern Technologies,United States,Telecommunications,117526041,Public,,3,0,0,
+SUP-1188,Western Solutions,China,Defense,1027730420,Subsidiary,PARENT-132,2,0,0,Section 889 Concern
+SUP-1189,Vertex Industries,Japan,Consumer Electronics,480774467,Private,,3,0,0,
+SUP-1190,Omega Manufacturing,Japan,Semiconductors,135621552,Subsidiary,PARENT-110,2,0,0,
+SUP-1191,Prime Energy,France,Logistics,162820102,Private,,2,0,0,
+SUP-1192,Vertex Holdings,China,Automotive,595592359,State-Owned,,2,0,0,
+SUP-1193,Vertex Solutions,UAE,Logistics,1090662671,Subsidiary,PARENT-30,1,0,0,
+SUP-1194,Omega Systems,Brazil,Logistics,1912160944,Public,,2,0,0,
+SUP-1195,Eastern Energy,Brazil,Metals & Mining,1571830940,Private,,2,0,0,
+SUP-1196,Western Trading,UK,Telecommunications,808805316,Public,,3,0,0,
+SUP-1197,Alpha Industries,China,Defense,205210112,Subsidiary,PARENT-96,1,0,0,Section 889 Concern
+SUP-1198,United Solutions,India,Industrial Machinery,1210997641,State-Owned,,3,0,0,
+SUP-1199,Prime Logistics,Russia,Metals & Mining,1869213687,Private,,2,0,1,High-Risk Country
+SUP-1200,Vertex Manufacturing,Russia,Defense,1246070566,Public,,1,0,1,High-Risk Country
+SUP-1201,Alpha Systems,Turkey,Defense,756864071,State-Owned,,1,0,1,High-Risk Country
+SUP-1202,National Corp,Germany,Metals & Mining,1819956894,Private,,3,0,0,
+SUP-1203,National Technologies,United States,Telecommunications,1514034117,State-Owned,,2,1,0,Sanctions Match
+SUP-1204,Eastern Technologies,United States,Automotive,1221165291,Subsidiary,PARENT-37,1,0,0,
+SUP-1205,Global Industries,France,Consumer Electronics,466994344,Subsidiary,PARENT-117,2,0,0,
+SUP-1206,Eastern Holdings,Russia,Telecommunications,1554615540,State-Owned,,3,0,1,High-Risk Country
+SUP-1207,Vertex Industries,South Africa,Semiconductors,339105307,Public,,3,0,1,High-Risk Country
+SUP-1208,Global Industries,UAE,Logistics,1426502524,Subsidiary,PARENT-114,2,0,0,
+SUP-1209,Western Manufacturing,Germany,Consumer Electronics,249421235,State-Owned,,2,0,0,
+SUP-1210,Prime Manufacturing,UK,Industrial Machinery,1050035878,State-Owned,,1,0,0,
+SUP-1211,Advanced Logistics,Singapore,Semiconductors,21507894,Public,,2,0,0,
+SUP-1212,Advanced Holdings,Vietnam,Telecommunications,626582976,State-Owned,,1,0,0,
+SUP-1213,Global Energy,France,Metals & Mining,382301720,Public,,2,0,0,
+SUP-1214,Omega Systems,South Korea,Consumer Electronics,1794614526,State-Owned,,1,0,0,
+SUP-1215,Western Technologies,Brazil,Semiconductors,992314730,Private,,2,0,0,
+SUP-1216,Vertex Logistics,Singapore,Metals & Mining,1528637412,Subsidiary,PARENT-30,2,0,0,
+SUP-1217,Western Technologies,Russia,Automotive,1725826209,Subsidiary,PARENT-93,3,0,1,High-Risk Country
+SUP-1218,Prime Logistics,Turkey,Defense,527518148,Subsidiary,PARENT-103,3,0,1,High-Risk Country
+SUP-1219,Omega Industries,Brazil,Telecommunications,1606603675,State-Owned,,1,0,0,
+SUP-1220,Eastern Holdings,China,Consumer Electronics,1364839619,Private,,3,1,0,Sanctions Match
+SUP-1221,Omega Systems,South Africa,Energy,758980932,Public,,1,0,1,High-Risk Country
+SUP-1222,Prime Holdings,UAE,Pharmaceuticals,377586317,Public,,3,0,0,
+SUP-1223,Prime Holdings,Vietnam,Logistics,1001331630,Subsidiary,PARENT-145,3,1,0,Sanctions Match
+SUP-1224,Vertex Trading,Turkey,Energy,329178545,Subsidiary,PARENT-121,1,0,1,High-Risk Country
+SUP-1225,Alpha Manufacturing,Vietnam,Telecommunications,1275064256,Private,,2,1,0,Sanctions Match
+SUP-1226,Omega Industries,UAE,Logistics,975477640,Private,,1,0,0,
+SUP-1227,Eastern Manufacturing,China,Defense,1325720450,Subsidiary,PARENT-149,2,0,0,Section 889 Concern
+SUP-1228,Omega Technologies,Japan,Industrial Machinery,1404810284,Public,,2,1,0,Sanctions Match
+SUP-1229,Vertex Energy,South Korea,Automotive,137872767,Subsidiary,PARENT-88,1,0,0,
+SUP-1230,Prime Solutions,UK,Automotive,89057080,Public,,3,0,0,
+SUP-1231,Alpha Energy,South Korea,Consumer Electronics,1314547147,Public,,2,0,0,
+SUP-1232,Eastern Manufacturing,Brazil,Metals & Mining,1668150464,State-Owned,,3,0,0,
+SUP-1233,Vertex Technologies,Vietnam,Energy,146544634,State-Owned,,1,0,0,
+SUP-1234,Omega Logistics,UAE,Telecommunications,1559206183,Public,,2,0,0,
+SUP-1235,Prime Corp,UK,Automotive,1973698017,State-Owned,,2,0,0,
+SUP-1236,Western Holdings,Singapore,Defense,669822039,Subsidiary,PARENT-85,3,0,0,
+SUP-1237,United Solutions,China,Metals & Mining,1096970713,State-Owned,,1,0,0,
+SUP-1238,Eastern Manufacturing,United States,Pharmaceuticals,738864621,Subsidiary,PARENT-58,1,1,0,Sanctions Match
+SUP-1239,United Holdings,China,Telecommunications,1818396146,Private,,3,0,0,
+SUP-1240,Omega Solutions,India,Energy,1887039138,Public,,3,0,0,
+SUP-1241,Western Holdings,United States,Automotive,1790299914,Public,,3,0,0,
+SUP-1242,Alpha Technologies,Brazil,Energy,1457478306,Public,,2,0,0,
+SUP-1243,Vertex Manufacturing,Vietnam,Logistics,507517498,Public,,2,0,0,
+SUP-1244,Alpha Systems,Russia,Industrial Machinery,951175724,Subsidiary,PARENT-98,2,0,1,High-Risk Country
+SUP-1245,Omega Solutions,Brazil,Automotive,1759260576,Public,,3,0,0,
+SUP-1246,United Manufacturing,India,Logistics,1882151847,State-Owned,,3,0,0,
+SUP-1247,Prime Solutions,Turkey,Defense,617168168,Private,,1,0,1,High-Risk Country
+SUP-1248,National Energy,South Africa,Consumer Electronics,321428823,Subsidiary,PARENT-57,1,0,1,High-Risk Country
+SUP-1249,Alpha Trading,South Africa,Semiconductors,895984332,Private,,2,0,1,High-Risk Country
+SUP-1250,Omega Trading,Germany,Metals & Mining,180246342,State-Owned,,1,1,0,Sanctions Match
+SUP-1251,Global Trading,South Africa,Defense,1807117350,State-Owned,,1,0,1,High-Risk Country
+SUP-1252,United Technologies,UAE,Logistics,1499803205,Public,,3,0,0,
+SUP-1253,Alpha Energy,Singapore,Semiconductors,1950314147,Private,,1,0,0,
+SUP-1254,National Systems,Turkey,Automotive,1183548129,Subsidiary,PARENT-74,1,0,1,High-Risk Country
+SUP-1255,Advanced Manufacturing,China,Semiconductors,517044934,Subsidiary,PARENT-118,3,0,0,
+SUP-1256,Prime Industries,Turkey,Logistics,1286487333,Private,,3,0,1,High-Risk Country
+SUP-1257,Omega Corp,Germany,Automotive,630501830,Subsidiary,PARENT-91,1,0,0,
+SUP-1258,Advanced Corp,Brazil,Automotive,1431726508,Private,,3,0,0,
+SUP-1259,Eastern Industries,South Korea,Consumer Electronics,1094477935,Private,,2,0,0,
+SUP-1260,Alpha Technologies,UK,Metals & Mining,806660779,State-Owned,,3,0,0,
+SUP-1261,Global Trading,Vietnam,Defense,745457726,Public,,3,0,0,
+SUP-1262,Prime Corp,France,Energy,291494927,Private,,2,0,0,
+SUP-1263,Omega Trading,Turkey,Automotive,1788235320,Subsidiary,PARENT-123,3,0,1,High-Risk Country
+SUP-1264,United Holdings,China,Logistics,84422089,State-Owned,,1,0,0,
+SUP-1265,Global Systems,South Africa,Semiconductors,682736854,State-Owned,,3,0,1,High-Risk Country
+SUP-1266,Western Solutions,Japan,Telecommunications,83642496,Public,,2,0,0,
+SUP-1267,Eastern Technologies,Turkey,Energy,591728204,Private,,2,0,1,High-Risk Country
+SUP-1268,Western Logistics,France,Logistics,1926219384,Subsidiary,PARENT-48,2,0,0,
+SUP-1269,Alpha Energy,Russia,Consumer Electronics,577778325,Private,,3,0,1,High-Risk Country
+SUP-1270,Western Industries,Brazil,Industrial Machinery,1770964455,Public,,3,0,0,
+SUP-1271,National Trading,China,Defense,709202632,State-Owned,,2,0,0,Section 889 Concern
+SUP-1272,Alpha Corp,France,Metals & Mining,362866913,Subsidiary,PARENT-115,2,0,0,
+SUP-1273,Global Trading,Singapore,Metals & Mining,594603147,Private,,1,0,0,
+SUP-1274,Western Trading,South Korea,Automotive,71873976,Public,,3,0,0,
+SUP-1275,Alpha Technologies,United States,Defense,511796218,State-Owned,,2,0,0,
+SUP-1276,Western Corp,India,Industrial Machinery,334505950,Subsidiary,PARENT-96,2,0,0,
+SUP-1277,Alpha Industries,Singapore,Automotive,1142006444,State-Owned,,2,0,0,
+SUP-1278,Eastern Manufacturing,Germany,Defense,60648471,Public,,2,0,0,
+SUP-1279,Omega Logistics,South Africa,Consumer Electronics,257889820,State-Owned,,2,0,1,High-Risk Country
+SUP-1280,Alpha Systems,Singapore,Telecommunications,1495312079,Subsidiary,PARENT-32,1,0,0,
+SUP-1281,United Industries,Japan,Automotive,1934898512,Subsidiary,PARENT-82,1,1,0,Sanctions Match
+SUP-1282,Eastern Industries,South Korea,Consumer Electronics,628548240,State-Owned,,1,0,0,
+SUP-1283,United Trading,South Korea,Pharmaceuticals,265623879,Public,,1,0,0,
+SUP-1284,Advanced Energy,India,Energy,1194751981,State-Owned,,2,1,0,Sanctions Match
+SUP-1285,Omega Holdings,Singapore,Defense,146192988,State-Owned,,2,0,0,
+SUP-1286,Alpha Solutions,Brazil,Metals & Mining,1773107890,Private,,1,0,0,
+SUP-1287,Eastern Industries,Japan,Logistics,1465522932,State-Owned,,1,0,0,
+SUP-1288,Omega Corp,United States,Automotive,934040692,Private,,1,0,0,
+SUP-1289,Omega Holdings,UAE,Automotive,352821401,State-Owned,,3,0,0,
+SUP-1290,Advanced Trading,South Korea,Telecommunications,1821628810,Private,,2,0,0,
+SUP-1291,Advanced Solutions,UAE,Automotive,1347225296,State-Owned,,3,0,0,
+SUP-1292,Omega Industries,South Korea,Automotive,1275898954,Public,,1,0,0,
+SUP-1293,Vertex Corp,Russia,Industrial Machinery,93464090,Private,,1,0,1,High-Risk Country
+SUP-1294,Global Corp,UAE,Pharmaceuticals,1652031905,Subsidiary,PARENT-8,3,0,0,
+SUP-1295,Alpha Solutions,UAE,Telecommunications,1042116100,Public,,3,0,0,
+SUP-1296,Western Manufacturing,Japan,Defense,1483786384,Private,,1,0,0,
+SUP-1297,Alpha Logistics,Japan,Logistics,443136085,State-Owned,,3,0,0,
+SUP-1298,United Trading,Turkey,Energy,1581681959,State-Owned,,2,0,1,High-Risk Country
