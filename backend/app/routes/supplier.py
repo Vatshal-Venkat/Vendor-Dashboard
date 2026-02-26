@@ -292,6 +292,9 @@ def get_supplier_profile(
     if not supplier:
         raise HTTPException(status_code=404, detail="Supplier not found")
 
+    # =========================
+    # Latest Assessment
+    # =========================
     latest_assessment = (
         db.query(AssessmentHistory)
         .filter(AssessmentHistory.supplier_id == supplier.id)
@@ -306,6 +309,9 @@ def get_supplier_profile(
         .all()
     )
 
+    # =========================
+    # Linked Global Entities
+    # =========================
     linked_entities = (
         db.query(SupplierEntityLink, GlobalEntity)
         .join(GlobalEntity, SupplierEntityLink.entity_id == GlobalEntity.id)
@@ -343,6 +349,9 @@ def get_supplier_profile(
 
         entity_data.append(entity_info)
 
+    # =========================
+    # Graph Summary
+    # =========================
     graph_summary = {"node_count": 0, "relationship_count": 0}
 
     try:
@@ -363,14 +372,64 @@ def get_supplier_profile(
     except Exception as e:
         print(f"Graph summary failed: {e}")
 
+    # =========================
+    # Parent / Subsidiary Fetch
+    # =========================
+    parent_entities = []
+    subsidiaries = []
+
+    try:
+        with get_session() as session:
+
+            main_entity = None
+            if linked_entities:
+                main_entity = linked_entities[0][1].canonical_name
+
+            if main_entity:
+
+                # Parent entities
+                parent_result = session.run(
+                    """
+                    MATCH (e:GlobalEntity {canonical_name: $name})-[:RELATION {type:'SUBSIDIARY_OF'}]->(parent)
+                    RETURN parent.canonical_name as name
+                    """,
+                    name=main_entity,
+                )
+
+                parent_entities = [r["name"] for r in parent_result]
+
+                # Subsidiaries
+                child_result = session.run(
+                    """
+                    MATCH (child:GlobalEntity)-[:RELATION {type:'SUBSIDIARY_OF'}]->(e:GlobalEntity {canonical_name: $name})
+                    RETURN child.canonical_name as name
+                    """,
+                    name=main_entity,
+                )
+
+                subsidiaries = [r["name"] for r in child_result]
+
+    except Exception as e:
+        print(f"Parent/subsidiary fetch failed: {e}")
+
+    # Fallback to Supplier.parent_company if graph empty
+    if not parent_entities and supplier.parent_company:
+        parent_entities = [supplier.parent_company]
+
+    # =========================
+    # Final Response
+    # =========================
     return {
         "supplier": {
             "id": supplier.id,
-            "name": supplier.name,
-            "country": supplier.country,
+            "legal_entity_name": supplier.name,
+            "registration_country": supplier.country,
             "industry": supplier.industry,
             "created_at": supplier.created_at,
         },
+        "parent_entities": parent_entities,
+        "subsidiaries": subsidiaries,
+        "certifications": [],  # placeholder for now
         "latest_assessment": {
             "risk_score": latest_assessment.risk_score if latest_assessment else None,
             "overall_status": latest_assessment.overall_status if latest_assessment else None,
@@ -389,7 +448,6 @@ def get_supplier_profile(
         "sanctioned_entities": sanction_hits,
         "graph_summary": graph_summary,
     }
-
 
 # =====================================================
 # SUPPLIER ASSESSMENT
