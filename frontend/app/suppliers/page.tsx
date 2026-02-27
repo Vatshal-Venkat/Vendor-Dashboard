@@ -163,7 +163,7 @@ export default function SuppliersPage() {
 
                 <div className="col-span-2 text-right">
                   <button
-                    onClick={() => router.push(`/suppliers/${supplier.id}/history`)}
+                    onClick={() => router.push(`/suppliers/${supplier.id}`)}
                     className="px-4 py-1.5 text-xs tracking-wide border border-zinc-700 hover:border-white transition mr-2"
                   >
                     Profile

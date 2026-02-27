@@ -4,11 +4,11 @@ import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import api from "@/lib/api";
 import ProtectedRoute from "@/components/ProtectedRoute";
+import TrustGraph from "@/components/TrustGraph";
 
 export default function SupplierProfilePage() {
     const { id } = useParams();
     const router = useRouter();
-
     const [data, setData] = useState<any>(null);
 
     useEffect(() => {
@@ -30,54 +30,128 @@ export default function SupplierProfilePage() {
         );
     }
 
-    const { supplier, latest_assessment, graph_summary } = data;
+    const {
+        supplier,
+        latest_assessment,
+        linked_entities,
+        sanctioned_entities,
+        graph_summary,
+    } = data;
 
     return (
         <ProtectedRoute>
-            <main className="min-h-screen bg-[#070b12] text-white px-16 py-16 space-y-16">
+            <main className="min-h-screen bg-[#070b12] text-white px-20 py-16 max-w-6xl mx-auto space-y-16">
 
                 {/* HEADER */}
                 <div className="flex justify-between items-start">
+
                     <div>
-                        <h1 className="text-4xl font-semibold">
+                        <h1 className="text-3xl font-semibold tracking-tight">
                             {supplier.legal_entity_name}
                         </h1>
-                        <p className="text-zinc-500 mt-2">
-                            {supplier.registration_country} | {supplier.industry}
+                        <p className="text-zinc-500 text-sm mt-1">
+                            {supplier.registration_country} • {supplier.industry}
                         </p>
                     </div>
 
+                    {/* WHITE BUTTON */}
                     <button
                         onClick={() => router.push(`/suppliers/${id}/history`)}
-                        className="px-6 py-2 bg-indigo-600 rounded-lg hover:bg-indigo-500 transition"
+                        className="px-5 py-2 text-sm border border-white text-white rounded-md hover:bg-white hover:text-black transition"
                     >
-                        View Assessment History
+                        Assessment History
                     </button>
+
                 </div>
 
                 {/* LATEST ASSESSMENT */}
-                <section className="bg-[#0c121c] border border-zinc-800 rounded-xl p-8 space-y-6">
-                    <h2 className="text-2xl font-semibold">
-                        Latest Assessment
+                <section className="border border-zinc-800 rounded-lg p-6 bg-[#0c121c] space-y-6">
+
+                    <h2 className="text-lg font-semibold">
+                        Latest Assessment Summary
                     </h2>
 
                     {latest_assessment ? (
-                        <div className="grid md:grid-cols-3 gap-6">
+                        <div className="space-y-3 text-sm">
 
-                            <Metric label="Risk Score" value={latest_assessment.risk_score} />
-                            <Metric label="Overall Status" value={latest_assessment.overall_status} />
-                            <Metric label="Graph Nodes" value={graph_summary.node_count} />
-
-                            <Metric label="Scoring Date"
+                            <Row label="Risk Score" value={latest_assessment.risk_score} />
+                            <Row label="Overall Status" value={latest_assessment.overall_status} />
+                            <Row
+                                label="Last Assessed"
                                 value={new Date(latest_assessment.created_at).toLocaleString()}
+                            />
+                            <Row
+                                label="Graph Nodes"
+                                value={graph_summary?.node_count ?? 0}
                             />
 
                         </div>
                     ) : (
-                        <div className="text-zinc-500">
+                        <div className="text-zinc-500 text-sm">
                             No assessments available.
                         </div>
                     )}
+                </section>
+
+                {/* SANCTIONS EXPOSURE */}
+                <section className="border border-zinc-800 rounded-lg p-6 bg-[#0c121c] space-y-4">
+
+                    <h2 className="text-lg font-semibold">
+                        Sanctions Exposure
+                    </h2>
+
+                    {sanctioned_entities?.length === 0 ? (
+                        <div className="text-green-400 text-sm">
+                            No sanctions exposure detected.
+                        </div>
+                    ) : (
+                        <ul className="space-y-1 text-red-400 text-sm">
+                            {sanctioned_entities?.map((name: string, index: number) => (
+                                <li key={index}>{name}</li>
+                            ))}
+                        </ul>
+                    )}
+                </section>
+
+                {/* LINKED ENTITIES */}
+                <section className="border border-zinc-800 rounded-lg p-6 bg-[#0c121c] space-y-6">
+
+                    <h2 className="text-lg font-semibold">
+                        Resolved Entities
+                    </h2>
+
+                    {linked_entities?.map((entity: any, index: number) => (
+                        <div key={index} className="border border-zinc-800 rounded-md p-4">
+
+                            <div className="font-medium">
+                                {entity.canonical_name}
+                            </div>
+
+                            <div className="text-xs text-zinc-400 mt-1">
+                                {entity.entity_type} • Confidence: {entity.confidence_score}
+                            </div>
+
+                            {entity.sanctions?.length > 0 && (
+                                <div className="text-red-400 text-xs mt-2">
+                                    Sanctioned via:{" "}
+                                    {entity.sanctions.map((s: any) => s.source).join(", ")}
+                                </div>
+                            )}
+
+                        </div>
+                    ))}
+
+                </section>
+
+                {/* TRUST GRAPH */}
+                <section className="border border-zinc-800 rounded-lg p-6 bg-[#0c121c] space-y-6">
+
+                    <h2 className="text-lg font-semibold">
+                        Relationship Graph
+                    </h2>
+
+                    <TrustGraph name={supplier.legal_entity_name} />
+
                 </section>
 
             </main>
@@ -85,15 +159,13 @@ export default function SupplierProfilePage() {
     );
 }
 
-function Metric({ label, value }: { label: string; value: any }) {
+/* Compact Row */
+
+function Row({ label, value }: { label: string; value: any }) {
     return (
-        <div className="bg-[#101726] border border-zinc-800 rounded-lg p-4">
-            <div className="text-xs text-zinc-500 uppercase tracking-wide">
-                {label}
-            </div>
-            <div className="text-lg font-semibold">
-                {value}
-            </div>
+        <div className="flex justify-between text-sm">
+            <span className="text-zinc-500">{label}</span>
+            <span className="text-white font-medium">{value}</span>
         </div>
     );
 }
