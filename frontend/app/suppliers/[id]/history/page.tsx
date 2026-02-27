@@ -39,7 +39,6 @@ export default function SupplierHistoryPage() {
     api
       .get(`/suppliers/${id}/history`)
       .then((res) => {
-        // Sort newest first
         const sorted = [...res.data].sort(
           (a, b) =>
             new Date(b.created_at).getTime() -
@@ -76,19 +75,20 @@ export default function SupplierHistoryPage() {
 
   return (
     <ProtectedRoute>
-      <main className="min-h-screen bg-[#070b12] text-white px-16 py-16 space-y-16">
+      <main className="min-h-screen bg-[#070b12] text-white px-20 py-16 max-w-5xl mx-auto space-y-14">
 
+        {/* HEADER */}
         <div>
-          <h1 className="text-4xl font-semibold">
-            Assessment Timeline
+          <h1 className="text-3xl font-semibold tracking-tight">
+            Assessment History
           </h1>
-          <p className="text-zinc-500 mt-2">
-            Historical scoring evolution for this supplier.
+          <p className="text-zinc-500 text-sm mt-1">
+            Chronological audit of scoring activity.
           </p>
         </div>
 
         {/* TIMELINE */}
-        <div className="relative pl-10 space-y-12 border-l border-zinc-800">
+        <div className="relative border-l border-zinc-800 pl-6 space-y-10">
 
           {history.map((assessment, index) => {
             const isLatest = index === 0;
@@ -101,61 +101,59 @@ export default function SupplierHistoryPage() {
 
                 {/* Timeline Dot */}
                 <div
-                  className={`absolute -left-[11px] top-2 w-5 h-5 rounded-full border-2 ${isLatest
-                      ? "bg-indigo-500 border-indigo-400"
-                      : "bg-[#070b12] border-zinc-600"
+                  className={`absolute -left-[9px] top-2 w-4 h-4 rounded-full ${isLatest
+                      ? "bg-indigo-500"
+                      : "bg-zinc-600"
                     }`}
                 />
 
-                {/* Card */}
                 <div
                   onClick={() => toggleSelect(assessment.id)}
-                  className={`cursor-pointer rounded-xl p-6 border transition ${isSelected
-                      ? "border-indigo-500 bg-[#0f172a]"
+                  className={`cursor-pointer p-5 rounded-lg border transition ${isSelected
+                      ? "border-indigo-500 bg-[#111827]"
                       : "border-zinc-800 bg-[#0c121c]"
                     }`}
                 >
 
-                  {/* Header */}
-                  <div className="flex justify-between items-center mb-4">
-                    <div className="flex items-center gap-4">
-                      <div className="text-2xl font-bold">
+                  {/* Top Row */}
+                  <div className="flex justify-between items-center">
+
+                    <div className="flex items-center gap-3">
+                      <span className="text-xl font-semibold">
                         {assessment.risk_score}
-                      </div>
+                      </span>
 
                       {isLatest && (
-                        <span className="text-xs bg-indigo-600 px-2 py-1 rounded-full">
+                        <span className="text-[10px] px-2 py-0.5 bg-indigo-600 rounded-full">
                           LATEST
                         </span>
                       )}
 
                       {isNewVersion && (
-                        <span className="text-xs bg-green-600 px-2 py-1 rounded-full">
+                        <span className="text-[10px] px-2 py-0.5 bg-green-600 rounded-full">
                           NEW VERSION
                         </span>
                       )}
                     </div>
 
                     <div className="text-xs text-zinc-500">
-                      {new Date(
-                        assessment.created_at
-                      ).toLocaleString()}
+                      {new Date(assessment.created_at).toLocaleString()}
                     </div>
                   </div>
 
-                  {/* Metrics */}
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-4 text-sm">
+                  {/* Compact Metric Row */}
+                  <div className="mt-4 text-sm text-zinc-400 space-y-1">
 
-                    <Metric label="Status" value={assessment.overall_status} />
-                    <Metric label="Section 889" value={assessment.section889_status} />
-                    <Metric label="Sanctions" value={assessment.sanctions_flag ? "Yes" : "No"} />
-                    <Metric label="Graph Risk" value={assessment.graph_risk_score} />
-                    <Metric label="News Signal" value={assessment.news_signal_score} />
-                    <Metric label="Version" value={assessment.scoring_version} />
+                    <Row label="Status" value={assessment.overall_status} />
+                    <Row label="Section 889" value={assessment.section889_status} />
+                    <Row label="Sanctions" value={assessment.sanctions_flag ? "Yes" : "No"} />
+                    <Row label="Graph Risk" value={assessment.graph_risk_score} />
+                    <Row label="News Signal" value={assessment.news_signal_score} />
+                    <Row label="Scoring Version" value={assessment.scoring_version} />
 
                   </div>
 
-                  <div className="text-xs text-zinc-500 mt-4">
+                  <div className="text-xs text-zinc-600 mt-3">
                     Initiated by User ID: {assessment.initiated_by_user_id}
                   </div>
 
@@ -167,36 +165,37 @@ export default function SupplierHistoryPage() {
         </div>
 
         {selected.length === 2 && (
-          <div>
-            <button
-              onClick={compareSelected}
-              className="px-6 py-2 bg-indigo-600 rounded-lg hover:bg-indigo-500 transition"
-            >
-              Compare Selected Assessments
-            </button>
-          </div>
+          <button
+            onClick={compareSelected}
+            className="px-5 py-2 text-sm bg-indigo-600 rounded-md hover:bg-indigo-500 transition"
+          >
+            Compare Selected Assessments
+          </button>
         )}
 
         {/* DELTA PANEL */}
         {delta && (
-          <div className="space-y-6">
-            <h2 className="text-2xl font-semibold">
-              Assessment Delta
+          <div className="space-y-6 border-t border-zinc-800 pt-8">
+
+            <h2 className="text-xl font-semibold">
+              Assessment Comparison
             </h2>
 
-            <div className="grid md:grid-cols-2 gap-6">
+            <div className="space-y-4 text-sm">
 
-              <DeltaCard label="Risk Score" value={delta.risk_score_delta} />
-              <DeltaCard label="Sanctions Flag" value={delta.sanctions_flag_delta} />
-              <DeltaCard label="News Signal" value={delta.news_signal_delta} />
-              <DeltaCard label="Graph Risk" value={delta.graph_risk_delta} />
+              <DeltaRow label="Risk Score" value={delta.risk_score_delta} />
+              <DeltaRow label="Sanctions Flag" value={delta.sanctions_flag_delta} />
+              <DeltaRow label="News Signal" value={delta.news_signal_delta} />
+              <DeltaRow label="Graph Risk" value={delta.graph_risk_delta} />
 
-              <DeltaText label="Section 889"
+              <SimpleDelta
+                label="Section 889"
                 from={delta.section889_change.from}
                 to={delta.section889_change.to}
               />
 
-              <DeltaText label="Scoring Version"
+              <SimpleDelta
+                label="Scoring Version"
                 from={delta.version_change.from}
                 to={delta.version_change.to}
               />
@@ -210,39 +209,39 @@ export default function SupplierHistoryPage() {
   );
 }
 
-/* ---------- Helper Components ---------- */
+/* ---------- Compact Components ---------- */
 
-function Metric({ label, value }: { label: string; value: any }) {
+function Row({ label, value }: { label: string; value: any }) {
   return (
-    <div className="bg-[#101726] border border-zinc-800 rounded-lg p-4">
-      <div className="text-xs text-zinc-500 uppercase tracking-wide">
-        {label}
-      </div>
-      <div className="text-sm font-semibold">
-        {value}
-      </div>
+    <div className="flex justify-between">
+      <span className="text-zinc-500">{label}</span>
+      <span className="text-white">{value}</span>
     </div>
   );
 }
 
-function DeltaCard({ label, value }: { label: string; value: number }) {
+function DeltaRow({ label, value }: { label: string; value: number }) {
   const positive = value > 0;
   const negative = value < 0;
 
   return (
-    <div className="bg-[#0c121c] border border-zinc-800 rounded-xl p-6">
-      <div className="text-sm text-zinc-500 mb-2">{label}</div>
-      <div
-        className={`text-xl font-bold ${positive ? "text-red-400" : negative ? "text-green-400" : "text-white"
+    <div className="flex justify-between items-center">
+      <span className="text-zinc-500">{label}</span>
+      <span
+        className={`font-medium ${positive
+            ? "text-red-400"
+            : negative
+              ? "text-green-400"
+              : "text-white"
           }`}
       >
-        {value}
-      </div>
+        {value > 0 ? `+${value}` : value}
+      </span>
     </div>
   );
 }
 
-function DeltaText({
+function SimpleDelta({
   label,
   from,
   to,
@@ -252,11 +251,11 @@ function DeltaText({
   to: string;
 }) {
   return (
-    <div className="bg-[#0c121c] border border-zinc-800 rounded-xl p-6">
-      <div className="text-sm text-zinc-500 mb-2">{label}</div>
-      <div className="text-white">
+    <div className="flex justify-between">
+      <span className="text-zinc-500">{label}</span>
+      <span className="text-white">
         {from} → {to}
-      </div>
+      </span>
     </div>
   );
 }
