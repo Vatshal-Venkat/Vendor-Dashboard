@@ -2,7 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "@/lib/api";
 
 import AnimatedCounter from "@/components/ui/AnimatedCounter";
 import GradientSurface from "@/components/ui/GradientSurface";
@@ -10,88 +10,165 @@ import DeltaIndicator from "@/components/ui/DeltaIndicator";
 import ComparisonBar from "@/components/ui/ComparisonBar";
 import HeatBar from "@/components/ui/HeatBar";
 
+type Metrics = {
+  risk_score: number;
+  sanctions_count: number;
+  section_rank: number;
+  graph_exposure: number;
+  news_signal: number;
+};
+
+type SupplierData = {
+  id: number;
+  name: string;
+  metrics: Metrics;
+  decision_score: number;
+};
+
+type CompareResponse = {
+  supplier_a?: SupplierData;
+  supplier_b?: SupplierData;
+  comparison?: any;
+  delta_breakdown?: any;
+  error?: string;
+};
+
 export default function ComparisonPage() {
   const searchParams = useSearchParams();
   const ids = searchParams.get("ids");
 
-  const [suppliers, setSuppliers] = useState<any[]>([]);
+  const [compareData, setCompareData] = useState<CompareResponse | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!ids) return;
+    if (!ids) {
+      setLoading(false);
+      return;
+    }
 
     const idArray = ids.split(",");
 
-    Promise.all(
-      idArray.map(id =>
-        axios.get(
-          `http://127.0.0.1:8000/suppliers/${id}/assessment`
-        )
+    if (idArray.length !== 2) {
+      console.error("Exactly 2 supplier IDs required.");
+      setLoading(false);
+      return;
+    }
+
+    const [supplierA, supplierB] = idArray;
+
+    setLoading(true);
+
+    api
+      .get(
+        `/suppliers/compare?supplier_a=${supplierA}&supplier_b=${supplierB}`
       )
-    ).then(responses =>
-      setSuppliers(responses.map(r => r.data))
-    );
+      .then((res) => {
+        console.log("COMPARE RESPONSE:", res.data);
+        setCompareData(res.data);
+      })
+      .catch((err) => {
+        console.error("Comparison fetch failed:", err);
+        setCompareData({ error: "Failed to load comparison." });
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   }, [ids]);
 
-  if (suppliers.length !== 2) {
+  /* ===========================
+     Loading
+  ============================ */
+  if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        Select exactly 2 suppliers.
+      <div className="min-h-screen flex items-center justify-center text-white">
+        Loading comparison...
       </div>
     );
   }
 
-  const [a, b] = suppliers;
+  /* ===========================
+     No IDs
+  ============================ */
+  if (!ids) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        No supplier IDs provided.
+      </div>
+    );
+  }
 
-  const delta = b.risk_score - a.risk_score;
-  const maxScore = Math.max(a.risk_score, b.risk_score, 100);
+  /* ===========================
+     Backend Error
+  ============================ */
+  if (compareData?.error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        {compareData.error}
+      </div>
+    );
+  }
+
+  if (!compareData?.supplier_a || !compareData?.supplier_b) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-red-500">
+        Invalid comparison data received.
+      </div>
+    );
+  }
+
+  const a = compareData.supplier_a;
+  const b = compareData.supplier_b;
+
+  const riskA = a.metrics?.risk_score ?? 0;
+  const riskB = b.metrics?.risk_score ?? 0;
+
+  const delta = riskB - riskA;
+  const maxScore = Math.max(riskA, riskB, 100);
 
   return (
-    <main className="min-h-screen px-10 py-16 space-y-14">
-
+    <main className="min-h-screen px-10 py-16 space-y-14 text-white">
       <h1 className="text-4xl font-semibold">
         Supplier Comparison
       </h1>
 
-      {/* Score Comparison */}
       <div className="grid md:grid-cols-2 gap-10">
 
+        {/* Supplier A */}
         <GradientSurface>
-          <h2 className="text-xl mb-6">{a.supplier}</h2>
+          <h2 className="text-xl mb-6">
+            {a.name}
+          </h2>
 
           <div className="text-4xl font-semibold">
-            <AnimatedCounter value={a.risk_score} />
+            <AnimatedCounter value={riskA} />
           </div>
 
-          <ComparisonBar
-            value={a.risk_score}
-            max={maxScore}
-          />
+          <ComparisonBar value={riskA} max={maxScore} />
 
           <div className="mt-6">
-            <HeatBar value={a.risk_score} />
+            <HeatBar value={riskA} />
           </div>
         </GradientSurface>
 
+        {/* Supplier B */}
         <GradientSurface>
-          <h2 className="text-xl mb-6">{b.supplier}</h2>
+          <h2 className="text-xl mb-6">
+            {b.name}
+          </h2>
 
-          <div className="text-4xl font-semibold">
-            <AnimatedCounter value={b.risk_score} />
+          <div className="text-4xl font-semibold flex items-center gap-3">
+            <AnimatedCounter value={riskB} />
             <DeltaIndicator value={delta} />
           </div>
 
-          <ComparisonBar
-            value={b.risk_score}
-            max={maxScore}
-          />
+          <ComparisonBar value={riskB} max={maxScore} />
 
           <div className="mt-6">
-            <HeatBar value={b.risk_score} />
+            <HeatBar value={riskB} />
           </div>
         </GradientSurface>
 
       </div>
-
     </main>
   );
 }

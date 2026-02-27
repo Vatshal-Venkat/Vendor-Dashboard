@@ -9,7 +9,8 @@ type Supplier = {
   name: string;
   country: string;
   industry: string;
-  risk?: "PASS" | "CONDITIONAL" | "FAIL" | null;
+  latest_status?: "PASS" | "CONDITIONAL" | "FAIL" | null;
+  risk_score?: number | null;
 };
 
 export default function SuppliersPage() {
@@ -136,17 +137,17 @@ export default function SuppliersPage() {
                       {supplier.name}
                     </span>
 
-                    {supplier.risk && (
+                    {supplier.latest_status && (
                       <span
                         className={`text-[10px] tracking-widest px-2 py-0.5 border rounded ${
-                          supplier.risk === "PASS"
+                          supplier.latest_status === "PASS"
                             ? "border-green-500 text-green-400"
-                            : supplier.risk === "CONDITIONAL"
+                            : supplier.latest_status === "CONDITIONAL"
                             ? "border-yellow-500 text-yellow-400"
                             : "border-red-500 text-red-400"
                         }`}
                       >
-                        {supplier.risk}
+                        {supplier.latest_status}
                       </span>
                     )}
                   </div>
@@ -161,6 +162,12 @@ export default function SuppliersPage() {
                 </div>
 
                 <div className="col-span-2 text-right">
+                  <button
+                    onClick={() => router.push(`/suppliers/${supplier.id}/history`)}
+                    className="px-4 py-1.5 text-xs tracking-wide border border-zinc-700 hover:border-white transition mr-2"
+                  >
+                    Profile
+                  </button>
                   <button
                     onClick={() => router.push(`/assessment/${supplier.id}`)}
                     className="px-4 py-1.5 text-xs tracking-wide border border-zinc-700 hover:border-white transition"

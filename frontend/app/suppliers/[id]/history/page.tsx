@@ -36,11 +36,12 @@ export default function SupplierProfilePage() {
 
         {/* Header */}
         <div className="mb-12">
-          <h1 className="text-4xl font-bold">{supplier.name}</h1>
+          <h1 className="text-4xl font-bold">
+            {supplier.legal_entity_name}
+          </h1>
           <p className="text-zinc-400 mt-2">
-            {supplier.country || "Unknown Country"} | {supplier.industry || "Unknown Industry"}
+            {supplier.registration_country || "Unknown Country"} | {supplier.industry || "Unknown Industry"}
           </p>
-
           <div className="mt-6 flex gap-8">
             <div>
               <div className="text-sm text-zinc-500">Risk Score</div>
